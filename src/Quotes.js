@@ -1,36 +1,12 @@
-import React, { useEffect, useState } from "react";
-import CssBaseline from '@mui/material/CssBaseline';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import SyncIcon from '@mui/icons-material/Sync';
-
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles(theme => ({
-  content: {
-    marging: `20px`
-  },
-  centered: {
-    position: `fixed`,
-    top: `50%`,
-    left: `50%`,
-    transform: `translate(-50%, -50%)`
-  },
-  actions: {
-    display: `flex`,
-    justifyContent: `flex-end`
-  }
-}));
+import React, { useEffect, useState } from 'react';
+import './Quotes.css';
 
 function Quotes() {
-  const classes = useStyles();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
   const [randomQuote, setRandomQuote] = useState({});
+  const author = randomQuote.author ? randomQuote.author : "anonymous"
 
   useEffect(() => {
     fetch("https://type.fit/api/quotes")
@@ -57,35 +33,29 @@ function Quotes() {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div className="centered lead">Error: {error.message}</div>;
   } else if (!isLoaded) {
-    return <div>Loading...</div>;
+    return <div className="centered lead">Loading...</div>;
   } else {
     return (
-      <React.Fragment className={classes.body}>
-        <CssBaseline />
-            <div className={classes.centered}>
-              <Card>
-                <CardContent className={classes.content}>
-                  <Typography gutterBottom variant="h3" color="text.primary">
-                    {randomQuote.text}
-                  </Typography>
+      <div className="container centered">
+        <blockquote className="blockquote text-center">
+          <p>{randomQuote.text}</p>
 
-                  <Typography gutterBottom variant="body" color="text.secondary">
-                    {randomQuote.author}
-                  </Typography>
-                </CardContent>
+          <footer class="blockquote-footer">
+            <cite title="Source Title">
+              {author}
+            </cite>
+          </footer>
+        </blockquote>
 
-                <CardActions className={classes.actions}>
-                  <IconButton onClick={setQuote} color="primary">
-                    <SyncIcon />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            </div>
+        <div class="d-flex justify-content-center">
+          <button onClick={setQuote} type="button" className="btn btn-sm btn-warning">
+            Another quote
+          </button>
+        </div>
 
-
-      </React.Fragment>
+      </div>
     )
   }
 }
